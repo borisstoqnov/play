@@ -18,9 +18,9 @@ def getsymbolsbycsv():
 #         lines = open('textfile.txt').readlines()
 #         open('newfile.txt', 'w').writelines(lines[17:])
 
-
+#get data for all companies in a directory
 def readcsvfromdirtopandas():
-    filepathwindows = "F:\\stockcompanies\\twofortest\\"
+    filepathwindows = "F:\\stockcompanies\\"
     filepathlinux = "/home/bobi/stockcompanies/modified/"
     i = []
     existingfiles = [f for f in listdir(filepathwindows) if isfile(join(filepathwindows, f))]
@@ -29,18 +29,21 @@ def readcsvfromdirtopandas():
             numberoflines = len(f.readlines())
             if numberoflines > 17:
                 df = pd.read_csv(filepathwindows + file + "", skiprows=18)
-                numberoftrades = len(df.iloc[:, 1])
-                summofnumber = sum(df.iloc[:, 1])
-                print(float(summofnumber)/float(numberoftrades))
+                calculateavaragefromcsv(df)
 
+#Get panda data for one company
 def readcsvfiletopandas(filename):
 
     with open(filename) as f:
         numberoflines = len(f.readlines())
         if numberoflines > 17:
             df = pd.read_csv(filename, skiprows=18)
-            numberoftrades = len(df.iloc[:, 1])
-            summofnumber = sum(df.iloc[:, 1])
-            print(float(summofnumber)/float(numberoftrades))
+            return df
 
-readcsvfiletopandas("F:\\stockcompanies\\twofortest\\AMD.csv")
+#Get the avarage sum
+def calculateavaragefromcsv(df):
+    numberoftrades = len(df.iloc[:, 1])
+    summofnumber = sum(df.iloc[:, 1])
+    print(float(summofnumber) / float(numberoftrades))
+
+readcsvfromdirtopandas()
