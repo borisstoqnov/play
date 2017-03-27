@@ -4,7 +4,9 @@ from os.path import isfile, join
 import pandas as pd
 
 def getsymbolsbycsv():
-    existingfiles = [f for f in listdir('/home/bobi/stockcompanies/') if isfile(join('/home/bobi/stockcompanies/', f))]
+    filepathwindows = "F:\\stockcompanies\\twofortest\\"
+    filepathlinux = "/home/bobi/stockcompanies/modified/"
+    existingfiles = [f for f in listdir(filepathwindows) if isfile(join(filepathwindows, f))]
     lofstocks = []
     for existingname in existingfiles:
         lofstocks.append(existingname.split(".")[0])
@@ -17,15 +19,28 @@ def getsymbolsbycsv():
 #         open('newfile.txt', 'w').writelines(lines[17:])
 
 
-def readcsvtopandas():
-    filepath = "/home/bobi/stockcompanies/modified/"
+def readcsvfromdirtopandas():
+    filepathwindows = "F:\\stockcompanies\\twofortest\\"
+    filepathlinux = "/home/bobi/stockcompanies/modified/"
     i = []
-    existingfiles = [f for f in listdir(filepath) if isfile(join(filepath, f))]
+    existingfiles = [f for f in listdir(filepathwindows) if isfile(join(filepathwindows, f))]
     for file in existingfiles:
-        with open(filepath + file) as f:
+        with open(filepathwindows + file) as f:
             numberoflines = len(f.readlines())
             if numberoflines > 17:
-                df = pd.read_csv(filepath + file + "", skiprows=17)
-                print(df)
+                df = pd.read_csv(filepathwindows + file + "", skiprows=18)
+                numberoftrades = len(df.iloc[:, 1])
+                summofnumber = sum(df.iloc[:, 1])
+                print(float(summofnumber)/float(numberoftrades))
 
-readcsvtopandas()
+def readcsvfiletopandas(filename):
+
+    with open(filename) as f:
+        numberoflines = len(f.readlines())
+        if numberoflines > 17:
+            df = pd.read_csv(filename, skiprows=18)
+            numberoftrades = len(df.iloc[:, 1])
+            summofnumber = sum(df.iloc[:, 1])
+            print(float(summofnumber)/float(numberoftrades))
+
+readcsvfiletopandas("F:\\stockcompanies\\twofortest\\AMD.csv")
