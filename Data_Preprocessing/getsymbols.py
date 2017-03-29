@@ -2,6 +2,11 @@ from os import listdir
 from os import listdir
 from os.path import isfile, join
 import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
+
 
 def getsymbolsbycsv():
     filepathwindows = "F:\\stockcompanies\\twofortest\\"
@@ -46,4 +51,39 @@ def calculateavaragefromcsv(df):
     summofnumber = sum(df.iloc[:, 1])
     print(float(summofnumber) / float(numberoftrades))
 
-readcsvfromdirtopandas()
+def liniarregression(df):
+    X = df.iloc[:, 3].values
+    y = df.iloc[:, 1].values
+    X = np.array(X).reshape(-1,1)
+    # y = np.array(y).reshape(1, -1)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 1/3, random_state = 0)
+    print(X)
+    print(y)
+
+# Fitting Simple Linear Regression to the Training set
+    regressor = LinearRegression()
+    regressor.fit(X_train, y_train)
+
+# Predicting the Test set results
+    y_pred = regressor.predict(X_test)
+    # plt.get_backend()
+# Visualising the Training set results
+    plt.scatter(X_train, y_train, color = 'red')
+    plt.plot(X_train, regressor.predict(X_train), color = 'blue')
+    plt.title('Open vs Close price (Training set)')
+    plt.xlabel('Open')
+    plt.ylabel('Close')
+    plt.show()
+
+
+# Visualising the Test set results
+    plt.scatter(X_test, y_test, color = 'red')
+    plt.plot(X_test, regressor.predict(X_test), color = 'blue')
+    plt.title('Open vs Close price (Test set)')
+    plt.xlabel('Open')
+    plt.ylabel('Close')
+    plt.show()
+
+
+liniarregression(readcsvfiletopandas("/home/bobi/stockcompanies/modified/AMD.csv"))
+
